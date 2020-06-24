@@ -329,6 +329,18 @@ class phpMQTT
             $buffer .= $this->strwritestring($key, $i);
             $buffer .= chr($topic['qos']);
             $i++;
+            $keyAry = explode('/', $key);
+            if(is_array($keyAry) && $keyAry[0] == '$queue') // example: $queue/t/1
+            {
+                array_shift($keyAry);
+                $key = implode("/", $keyAry);
+            }
+            else if(is_array($keyAry) && $keyAry[0] == '$share') //example: $share/abc/t/1
+            {
+                array_shift($keyAry);
+                array_shift($keyAry);
+                $key = implode("/", $keyAry);
+            }
             $this->topics[$key] = $topic;
         }
 
